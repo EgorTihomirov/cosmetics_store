@@ -1,25 +1,25 @@
 <template>
-  <div class="page">
-    <header class="header">
-            <nav class="nav">
-        <ul class="nav__list">
-          <li class="nav__item" @click="router.push('/about')">Каталог</li>
-          <li class="nav__item">О нас</li>
-        </ul>
-      </nav>
-      <span class="logo">akkery</span>
-
-      <div class="header__icons">
-        <button class="icon icon--search" aria-label="Поиск"></button>
-        <button class="icon icon--cart" aria-label="Корзина"></button>
+  <div id="app">
+    <header class="app-bar">
+      <div class="tabs-left">
+        <router-link to="/catalog" class="tab">Каталог</router-link>
+        <router-link to="/about" class="tab">О нас</router-link>
+      </div>
+      <router-link to="/" class="tab center-tab">
+        <h1>Akkery</h1>
+      </router-link>
+      <div class="tabs-right">
+        <router-link to="/like" class="tab">избранное</router-link>
+        <router-link to="/shopping" class="tab">карзина</router-link>
       </div>
     </header>
-    </div>
-  <div id="app">
-    <TheHeader />
-  </div>
-    <footer class="footer">
-      <hr>
+
+    <main class="main-content">
+      <router-view/>
+    </main>
+
+    <footer class="app-footer">
+       <hr>
       <div style="display: flex; justify-content: space-between; padding-top: 100px;">
         <p>Следите за нами</p>
         <p>Частые вопросы</p>
@@ -28,63 +28,77 @@
         <p>Горячая линия</p>
       </div>
     </footer>
+  </div>
 </template>
 
-<script>
-import TheHeader from './components/TheHeader.vue'
+<script setup>
+import { computed } from 'vue'
 
-export default {
-  name: 'App',
-  components: { 
-    TheHeader 
-  }
-}
+const year = computed(() => new Date().getFullYear())
 </script>
 
-<style >
+<style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin: 0;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.header {
-  width: 100%;
-  height: 100px;
-  background:#e2e2e2;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 20px;
+.app-bar {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
 }
-.logo { font: 32px 'Montserrat', sans-serif; }
 
-.nav__list { list-style:none; display:flex; gap:42px; }
-.nav__item { font-family:'Montserrat',sans-serif; cursor:pointer; }
-
-.header__icons { display:flex; gap:20px; }
-
-.icon {
-  width:30px; height:30px; border:none; background:#fff; cursor:pointer;
-}
-.icon--cart   { width:29px; height:29px; }
-.icon--search::before,
-.icon--cart::before  {
-  content:''; display:block; width:100%; height:100%; background:#000;
-}
-.footer {
-  position: fixed;
-  top: 80%;
-  right: 0;
-  bottom: 0;
-  padding-left: 1%;
-  padding-right: 1%;
-  text-align: center; 
-  width: 100%;   
-  font-size: 25px;
+.tab {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
   font-weight: bold;
-  color: #000000;  
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+}
+
+
+.app-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #000000;
+}
+
+.tabs-left, .tabs-right {
+  display: flex;
+  gap: 20px;
+}
+
+.center-tab {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.tab {
+  text-decoration: none;
+  color: inherit;
+  padding: 10px;
+}
+
+.tab h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.app-footer {
+  color: rgb(0, 0, 0);
+  text-align: center;
+  padding: 1rem;
 }
 </style>
