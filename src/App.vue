@@ -25,7 +25,7 @@
         <p>Частые вопросы</p>
         <h1 style="text-align: center;">akkery</h1>
         <p>Обмен и возврат</p>
-        <p>Горячая линия</p>
+        <p >Горячая линия</p>
       </div>
     </footer>
   </div>

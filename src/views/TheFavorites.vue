@@ -7,6 +7,7 @@
         <div class="product-info">
           <h3>{{ item.title }}</h3>
           <p>Цена: {{ item.price }}</p>
+          <button @click="removeFromFavorites(item.id)">Удалить</button>
         </div>
       </li>
     </ul>
@@ -21,6 +22,14 @@ export default {
       return this.$store.getters.getFavorites;
     }
   },
+  methods: {
+    onDetailsClick() {
+      // Логика для перехода на страницу товара
+    },
+    removeFromFavorites(productId) {
+      this.$store.dispatch('removeFromFavorites', productId);
+    }
+  }
 }
 </script>
 
@@ -40,5 +49,20 @@ export default {
 .product-info {
   display: inline-block;
   vertical-align: top;
+}
+
+.product-info button {
+  background-color: #6C8CD5;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.product-info button:hover {
+  background-color: #5A7ABF;
 }
 </style>
