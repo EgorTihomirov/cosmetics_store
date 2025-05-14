@@ -1,4 +1,3 @@
-<!-- О нас.vue -->
 <template>
   <section class="content-wrapper">
     <h1>О нас</h1>
