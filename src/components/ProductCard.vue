@@ -1,6 +1,5 @@
 <template>
   <div class="product-card">
-    
     <img src="../assets/крем.svg" alt="Product Image" class="product-image" />
     <h2 class="product-title">{{ title }}</h2>
     <p class="product-price">{{ price }}</p>
@@ -23,11 +22,15 @@ export default {
     price: {
       type: String,
       required: true
+    },
+    id: {
+      type: String,
+      required: true
     }
   },
   methods: {
     onDetailsClick() {
-      alert(`Подробнее о ${this.title}`);
+      this.$router.push({ name: 'ProductDetails', params: { id: this.id } });
     }
   }
 }

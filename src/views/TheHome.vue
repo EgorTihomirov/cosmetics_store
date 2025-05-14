@@ -2,7 +2,7 @@
   <img src="../assets/новая коллекция.svg" style="width: 100%;">
   <img src="../assets/прем.svg" style="width: 100%;">
   <h1 style="text-align: center;">Новинки</h1>
-    <div class="carousel-wrapper">
+  <div class="carousel-wrapper">
     <button class="arrow left" @click="scrollLeft">←</button>
     <div class="carousel">
       <div
@@ -10,7 +10,7 @@
         :key="index"
         class="carousel-item"
       >
-        <ProductCard :image="product.image" :title="product.title" :price="product.price"></ProductCard>
+        <ProductCard :image="product.image" :title="product.title" :price="product.price" :id="product.id"></ProductCard>
       </div>
     </div>
     <button class="arrow right" @click="scrollRight">→</button>
@@ -24,7 +24,7 @@
         :key="index"
         class="carousel-item"
       >
-        <ProductCard :image="product.image" :title="product.title" :price="product.price"></ProductCard>
+        <ProductCard :image="product.image" :title="product.title" :price="product.price" :id="product.id"></ProductCard>
       </div>
     </div>
     <button class="arrow right" @click="scrollRight">→</button>
@@ -34,16 +34,12 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import cream from '../assets/крем.svg'
 import ProductCard from '../components/ProductCard.vue';
+import { useStore } from 'vuex';
 
-const products = ref([
-  { image: cream, title: 'Товар 1', price: '₽ 1500' },
-  { image: cream, title: 'Товар 2', price: '₽ 1800' },
-  { image: cream, title: 'Товар 3', price: '₽ 2000' },
-  { image: cream, title: 'Товар 4', price: '₽ 1200' },
-  { image: cream, title: 'Товар 5', price: '₽ 1600' },
-])
+const store = useStore();
+
+const products = computed(() => store.getters.getAllProducts);
 
 const visibleCount = 4
 const startIndex = ref(0)

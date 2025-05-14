@@ -9,8 +9,8 @@
         <h1>Akkery</h1>
       </router-link>
       <div class="tabs-right">
-        <router-link to="/like" class="tab">избранное</router-link>
-        <router-link to="/shopping" class="tab">карзина</router-link>
+        <router-link to="/Favorites" class="tab">избранное</router-link>
+        <router-link to="/Cart" class="tab">карзина</router-link>
       </div>
     </header>
 
