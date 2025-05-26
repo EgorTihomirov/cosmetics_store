@@ -2,7 +2,8 @@
   <div id="app">
     <header class="app-bar">
       <div class="tabs-left">
-        <router-link to="/catalog" class="tab">Каталог</router-link>
+        <router-link to="/user" class="tab">пользователь</router-link>
+        <router-link to="/catalog" class="tab">каталог</router-link>
         <router-link to="/about" class="tab">О нас</router-link>
       </div>
       <router-link to="/" class="tab center-tab">
@@ -10,7 +11,7 @@
       </router-link>
       <div class="tabs-right">
         <router-link to="/Favorites" class="tab">избранное</router-link>
-        <router-link to="/Cart" class="tab">карзина</router-link>
+        <router-link to="/Cart" class="tab">корзина</router-link>
       </div>
     </header>
 
@@ -20,12 +21,18 @@
 
     <footer class="app-footer">
        <hr>
-      <div style="display: flex; justify-content: space-between; padding-top: 100px;">
-        <p>Следите за нами</p>
-        <p>Частые вопросы</p>
-        <h1 style="text-align: center;">akkery</h1>
-        <p>Обмен и возврат</p>
-        <p >Горячая линия</p>
+      <div style="display: flex; justify-content: space-between; padding-left: 20px; padding-right: 20px;">
+      <div class="tabs-left">
+        <router-link to="/catalog" class="tab">Следите за нами</router-link>
+        <router-link to="/questions" class="tab">Частые вопросы</router-link>
+      </div>
+        <router-link to="/" class="tab center-tab">
+          <h1>Akkery</h1>
+        </router-link>
+      <div class="tabs-right">
+        <router-link to="/Favorites" class="tab">Обмен и возврат</router-link>
+        <router-link to="/Cart" class="tab">Горячая линия</router-link>
+      </div>
       </div>
     </footer>
   </div>

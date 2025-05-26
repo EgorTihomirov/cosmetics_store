@@ -5,12 +5,26 @@ import About from '../views/TheAbout.vue'
 import Favorites from '../views/TheFavorites.vue'
 import Cart from '../views/TheCart.vue'
 import ProductDetails from '../views/ProductDetails.vue'
+import User from '../views/TheUser.vue'
+import Quest from '../views/TheQuestions.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+    props: true
+  },
+  {
+    path: '/questions',
+    name: 'quest',
+    component: Quest,
+    props: true
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: User,
     props: true
   },
   {
