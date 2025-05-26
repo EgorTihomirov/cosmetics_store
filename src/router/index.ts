@@ -7,12 +7,19 @@ import Cart from '../views/TheCart.vue'
 import ProductDetails from '../views/ProductDetails.vue'
 import User from '../views/TheUser.vue'
 import Quest from '../views/TheQuestions.vue'
+import Hotline from '../views/TheHotline.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+    props: true
+  },
+  {
+    path: '/hotline',
+    name: 'Hotline',
+    component: Hotline,
     props: true
   },
   {
