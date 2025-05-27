@@ -23,8 +23,8 @@ export default {
   name: 'TheHotline',
   data() {
     return {
-      phoneNumber: '+7 (495) 123-45-67',
-      emailAddress: 'support@example.com'
+      phoneNumber: '+7 (917) 529-40-11',
+      emailAddress: 'akkery272.com'
     };
   }
 };
@@ -68,12 +68,10 @@ h1 {
 }
 
 .phone-link::before {
-  content: '\u260E'; /* Телефон */
   margin-right: 5px;
 }
 
 .email-link::before {
-  content: '\u2709'; /* Почта */
   margin-right: 5px;
 }
 </style>
