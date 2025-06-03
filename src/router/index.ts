@@ -1,67 +1,88 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/TheHome.vue'
-import Catalog from '../views/TheCatalog.vue'
-import About from '../views/TheAbout.vue'
-import Favorites from '../views/TheFavorites.vue'
-import Cart from '../views/TheCart.vue'
+import TheHome from '../views/TheHome.vue'
+import TheCatalog from '../views/TheCatalog.vue'
+import TheAbout from '../views/TheAbout.vue'
+import TheFavorites from '../views/TheFavorites.vue'
+import TheCart from '../views/TheCart.vue'
 import ProductDetails from '../views/ProductDetails.vue'
-import User from '../views/TheUser.vue'
-import Quest from '../views/TheQuestions.vue'
-import Hotline from '../views/TheHotline.vue'
+import TheUser from '../views/TheUser.vue'
+import TheQuestions from '../views/TheQuestions.vue'
+import TheHotline from '../views/TheHotline.vue'
+import LoginView from '../views/LoginView.vue'
+import RegistrationView from '../views/RegistrationView.vue'
+import AuthComponent from '../views/AuthComponent.vue'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/cosmetics_store/auth',
+    name: 'Auth',
+    component: AuthComponent,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/log',
+    name: 'Login',
+    component: LoginView,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/reg',
+    name: 'Registration',
+    component: RegistrationView,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/account',
+    name: 'Account',
+    component: TheUser,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/',
     name: 'Home',
-    component: Home,
+    component: TheHome,
     props: true
   },
   {
-    path: '/hotline',
-    name: 'Hotline',
-    component: Hotline,
-    props: true
-  },
-  {
-    path: '/questions',
-    name: 'quest',
-    component: Quest,
-    props: true
-  },
-  {
-    path: '/user',
-    name: 'user',
-    component: User,
-    props: true
-  },
-  {
-    path: '/catalog',
+    path: '/cosmetics_store/catalog',
     name: 'Catalog',
-    component: Catalog,
+    component: TheCatalog,
     props: true
   },
   {
-    path: '/product/:id',
+    path: '/cosmetics_store/product/:id',
     name: 'ProductDetails',
     component: ProductDetails,
     props: true
   },
   {
-    path: '/about',
+    path: '/cosmetics_store/about',
     name: 'About',
-    component: About,
+    component: TheAbout,
     props: true
   },
   {
-    path: '/Favorites',
+    path: '/cosmetics_store/favorites',
     name: 'Favorites',
-    component: Favorites,
+    component: TheFavorites,
     props: true
   },
   {
-    path: '/Cart',
+    path: '/cosmetics_store/cart',
     name: 'Cart',
-    component: Cart,
+    component: TheCart,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/questions',
+    name: 'Questions',
+    component: TheQuestions,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/hotline',
+    name: 'Hotline',
+    component: TheHotline,
     props: true
   }
 ]
@@ -69,6 +90,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
-});
+})
 
-export default router;
+export default router

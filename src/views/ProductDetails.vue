@@ -1,51 +1,121 @@
 <template>
   <div class="product-details">
     <div class="product-image-container">
-      <img src="../assets/крем.svg" alt="Product Image" class="product-image" />
+      <img :src="getImageUrl(product?.image)" alt="Product Image" class="product-image" />
     </div>
     <div class="product-info">
-      <h1 style="padding-bottom: 20px;">{{ product.title }}</h1>
-      <p style="padding-bottom: 20px;">Цена: {{ product.price }}</p>
+      <h1 style="padding-bottom: 20px;">{{ product?.title }}</h1>
+      <p style="padding-bottom: 20px;">Цена: {{ product?.price }}</p>
       <br>
       <h1 style="padding-bottom: 30px;">Наличие доставки:</h1>
       <p style="padding-bottom: 10px;">Экспресс-доставка ............от 3 часов</p>
       <p style="padding-bottom: 10px;">Курьер ...................................от 3 часов</p>
       <p style="padding-bottom: 70px;">Самовывоз ...........................от 3 часов</p>
       <div class="buttons">
-        <button class="add" @click="addToCart(product)">Добавить в корзину</button>
-        <button class="add" @click="addToFavorites(product)">Добавить в избранное</button>
+        <button class="main-btn" @click="addToCart">Добавить в корзину</button>
+        <button class="main-btn" @click="addToFavorites">Добавить в избранное</button>
       </div>
     </div>
   </div>
   <div class="info">
     <h2>Описание:</h2>
-    <p>{{ product.description }}</p>
+    <p>{{ product?.description }}</p>
+  </div>
+
+  <!-- Формы для отзывов -->
+  <div class="review-section">
+    <div v-if="currentUser">
+      <h2>Оставить отзыв:</h2>
+      <form class="review-form" @submit.prevent="submitReview">
+        <textarea v-model="newReview.comment" rows="4" cols="50" placeholder="Напишите ваш отзыв здесь..."></textarea>
+        <select v-model="newReview.rating">
+          <option disabled value="">Оценка</option>
+          <option value="1">1 звезда</option>
+          <option value="2">2 звезды</option>
+          <option value="3">3 звезды</option>
+          <option value="4">4 звезды</option>
+          <option value="5">5 звезд</option>
+        </select>
+        <button type="submit" class="main-btn">Отправить отзыв</button>
+      </form>
+      <div v-if="reviewError" class="error-message">{{ reviewError }}</div>
+    </div>
+    <div v-else>
+      <p>Только авторизованные пользователи могут оставлять отзывы.</p>
+    </div>
+    <!-- Отзывы -->
+    <h2>Отзывы:</h2>
+    <ul>
+      <li v-for="review in reviews" :key="review.id">
+        <strong>Оценка: {{ review.rating }}/5</strong>
+        <span v-if="review.author"> — {{ review.author }}</span>
+        <p>{{ review.comment }}</p>
+      </li>
+    </ul>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ProductDetails',
-  props: {
-    id: {
-      type: String,
-      required: true
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
+
+const store = useStore();
+const route = useRoute();
+const productId = computed(() => route.params.id as string);
+const product = computed(() => store.getters.getProductById(productId.value));
+const currentUser = computed(() => store.getters.getCurrentUser);
+const reviews = computed(() => store.getters.getReviewsForProduct(productId.value));
+
+function getImageUrl(imagePath: string) {
+  if (/^(http|https|data):/.test(imagePath)) return imagePath;
+  try {
+    if (typeof require !== 'undefined') {
+      return require('@/assets/' + imagePath.replace('../assets/', ''));
     }
-  },
-  computed: {
-    product() {
-      return this.$store.getters.getProductById(this.id);
-    }
-  },
-  methods: {
-    addToCart(product) {
-      this.$store.dispatch('addToCart', product);
-    },
-    addToFavorites(product) {
-      this.$store.dispatch('addToFavorites', product);
-    }
+    return '';
+  } catch {
+    return '';
   }
 }
+
+const newReview = ref({
+  rating: '',
+  comment: ''
+});
+const reviewError = ref('');
+
+const addToCart = () => {
+  if (product.value) {
+    store.dispatch('addToCart', product.value);
+  }
+};
+const addToFavorites = () => {
+  if (product.value) {
+    store.dispatch('addToFavorites', product.value);
+  }
+};
+
+const submitReview = async () => {
+  if (!newReview.value.rating || !newReview.value.comment) {
+    reviewError.value = 'Пожалуйста, заполните все поля';
+    return;
+  }
+  const review = {
+    id: Date.now().toString(),
+    productId: productId.value,
+    rating: Number(newReview.value.rating),
+    comment: newReview.value.comment
+  };
+  const result = await store.dispatch('addReview', review);
+  if (result.success) {
+    newReview.value.rating = '';
+    newReview.value.comment = '';
+    reviewError.value = '';
+  } else {
+    reviewError.value = result.message || 'Ошибка отправки отзыва';
+  }
+};
 </script>
 
 <style scoped>
@@ -73,7 +143,7 @@ export default {
   align-items: flex-start;
 }
 
-.info{
+.info {
   padding-left: 50px;
 }
 
@@ -92,18 +162,157 @@ export default {
   margin-top: 10px;
 }
 
-.add {
-  background-color: #6C8CD5;
-  color: white;
-  border: none;
+.main-btn {
+  font-size: 1.2em;
   padding: 10px 20px;
-  border-radius: 10px;
+  background-color: white;
+  color: black;
+  border: 2px solid #222;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
   margin-right: 10px;
 }
 
-.add:hover {
-  background-color: #5A7ABF;
+.main-btn:hover {
+  border: 2px solid #3a4ed8;
+  color: #3a4ed8;
+  background: #f4f7ff;
+}
+
+.review-section {
+  margin-top: 30px;
+}
+
+.review-form {
+  background: #f9f9fb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(60, 80, 180, 0.07);
+  padding: 18px 18px 14px 18px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 500px;
+}
+
+.review-form textarea {
+  resize: vertical;
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid #d0d4e4;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  background: #fff;
+  transition: border 0.2s;
+  min-height: 70px;
+}
+
+.review-form textarea:focus {
+  border: 1.5px solid #3a4ed8;
+  outline: none;
+}
+
+.review-form select {
+  padding: 10px;
+  border: 1.5px solid #d0d4e4;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  background: #fff;
+  transition: border 0.2s;
+  width: 100%;
+}
+
+.review-form select:focus {
+  border: 1.5px solid #3a4ed8;
+  outline: none;
+}
+
+.main-btn {
+  font-size: 1.2em;
+  padding: 10px 20px;
+  background-color: white;
+  color: black;
+  border: 2px solid #222;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 6px;
+}
+
+.main-btn:hover {
+  border: 2px solid #3a4ed8;
+  color: #3a4ed8;
+  background: #f4f7ff;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .product-details {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .product-image-container {
+    margin-right: 0;
+    margin-bottom: 12px;
+  }
+  .product-image {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+  }
+  .info {
+    padding-left: 0;
+  }
+}
+@media (max-width: 600px) {
+  .product-details {
+    padding: 8px;
+    gap: 8px;
+  }
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  .product-info h1 {
+    font-size: 1.1em;
+    padding-bottom: 10px;
+  }
+  .main-btn {
+    font-size: 1em;
+    padding: 8px 8px;
+    border-radius: 6px;
+    margin-right: 6px;
+  }
+  .review-form {
+    padding: 10px 6px 8px 6px;
+    border-radius: 8px;
+    max-width: 100%;
+  }
+  .review-form textarea,
+  .review-form select {
+    font-size: 1em;
+    padding: 8px;
+    border-radius: 6px;
+  }
 }
 </style>

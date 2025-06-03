@@ -2,16 +2,21 @@
   <div id="app">
     <header class="app-bar">
       <div class="tabs-left">
-        <router-link to="/catalog" class="tab">Каталог</router-link>
-        <router-link to="/about" class="tab">О нас</router-link>
+        <router-link to="/cosmetics_store/catalog" class="tab">Каталог</router-link>
+        <router-link to="/cosmetics_store/about" class="tab">О нас</router-link>
       </div>
-      <router-link to="/" class="tab center-tab">
+      <router-link to="/cosmetics_store/" class="tab center-tab">
         <h1>Akkery</h1>
       </router-link>
       <div class="tabs-right">
-      <router-link to="/user" class="tab"><img src="../src/assets/user.svg"></router-link>
-        <router-link to="/Favorites" class="tab"><img src="../src/assets/ph_heart.svg"></router-link>
-        <router-link to="/Cart" class="tab"><img src="../src/assets/корзина.svg"></router-link>
+        <router-link
+          :to="currentUser ? '/cosmetics_store/account' : '/cosmetics_store/auth'"
+          class="tab"
+        >
+          <img src="../src/assets/user.svg" />
+        </router-link>
+        <router-link to="/cosmetics_store/favorites" class="tab"><img src="../src/assets/ph_heart.svg"></router-link>
+        <router-link to="/cosmetics_store/cart" class="tab"><img src="../src/assets/корзина.svg"></router-link>
       </div>
     </header>
 
@@ -24,19 +29,18 @@
       <div style="display: flex; justify-content: space-between; padding-left: 20px; padding-right: 20px;">
         <div class="tabs-left">
           <a href="https://t.me/ztoylo" class="tab">Следите за нами</a>
-          <router-link to="/questions" class="tab">Частые вопросы</router-link>
+          <router-link to="/cosmetics_store/questions" class="tab">Частые вопросы</router-link>
         </div>
-        <router-link to="/" class="tab center-tab">
+        <router-link to="/cosmetics_store/" class="tab center-tab">
           <h1>Akkery</h1>
         </router-link>
         <div class="tabs-right">
           <a href="https://t.me/Akkery_bot" class="tab">Поддержка</a>
-          <router-link to="/hotline" class="tab">Горячая линия</router-link>
+          <router-link to="/cosmetics_store/hotline" class="tab">Горячая линия</router-link>
         </div>
       </div>
+      <div v-if="isHome" class="user-count-footer">Пользователей на сайте: {{ userCount }}</div>
     </footer>
-
-    <!-- Плавающая кнопка возврата наверх -->
     <div class="scroll-to-top" @click="scrollToTop" v-if="showScrollButton">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up-circle">
         <circle cx="12" cy="12" r="10"/>
@@ -48,7 +52,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+
+const store = useStore()
+const route = useRoute()
+const currentUser = computed(() => store.getters.getCurrentUser)
+const userCount = computed(() => store.getters.usersCount || store.state.users.length)
+const isHome = computed(() => route.path === '/cosmetics_store/' || route.name === 'Home')
 
 // Переменная для отслеживания видимости кнопки
 const showScrollButton = ref(false)
@@ -92,6 +104,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   gap: 2rem;
+  align-items: center;
 }
 
 .tab {
@@ -168,5 +181,66 @@ onUnmounted(() => {
 
 .scroll-to-top:hover {
   opacity: 1;
+}
+
+.user-count-footer {
+  text-align: center;
+  color: #222;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+
+/* --- Адаптив --- */
+@media (max-width: 900px) {
+  .app-bar {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 4px;
+  }
+  .tabs-left, .tabs-right {
+    gap: 10px;
+  }
+  .main-content {
+    padding: 0.5rem;
+  }
+  .app-footer > div {
+    flex-direction: column !important;
+    gap: 10px;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+@media (max-width: 600px) {
+  .app-bar {
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 2px;
+  }
+  .tab {
+    font-size: 1em;
+    padding: 6px 4px;
+  }
+  .tab h1 {
+    font-size: 18px;
+  }
+  .main-content {
+    padding: 0.2rem;
+  }
+  .app-footer {
+    padding: 0.5rem;
+    font-size: 0.95em;
+  }
+  .app-footer > div {
+    flex-direction: column !important;
+    gap: 6px;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .user-count-footer {
+    font-size: 1em;
+    margin-top: 6px;
+    margin-bottom: 4px;
+  }
 }
 </style>

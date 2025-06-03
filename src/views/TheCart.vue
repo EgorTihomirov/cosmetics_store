@@ -3,15 +3,16 @@
     <h2>Товары</h2>
     <ul>
       <li v-for="item in cart" :key="item.id">
-        <img @click="onDetailsClick" src="../assets/крем.svg" alt="Product Image" class="product-image" />
+        <img :src="getImageUrl(item.image)" alt="Product Image" class="product-image" />
         <div class="product-info">
           <h3>{{ item.title }}</h3>
-          <p>Цена: {{ item.price }}</p>
-          <button @click="removeFromCart(item.id)">Удалить</button>
+          <p>Цена: {{ item.price }} ₽</p>
+          <button class="main-btn" @click="removeFromCart(item.id)">Удалить</button>
         </div>
       </li>
     </ul>
-    <button v-if="cart.length > 0" class="checkout-button" @click="startCheckout">Начать оплату</button>
+    <p v-if="cart.length > 0">Сумма: {{ totalSum }} ₽</p>
+    <button v-if="cart.length > 0" class="main-btn" @click="startCheckout">Начать оплату</button>
   </div>
 </template>
 
@@ -21,17 +22,28 @@ export default {
   computed: {
     cart() {
       return this.$store.getters.getCart;
+    },
+    totalSum() {
+      return this.$store.getters.cartTotalSum;
     }
   },
   methods: {
-    onDetailsClick() {
-      // Логика для перехода на страницу товара
+    removeFromCart(productId) {
+      this.$store.dispatch('removeFromCart', productId);
+    },
+    getImageUrl(imagePath) {
+      if (/^(http|https|data):/.test(imagePath)) return imagePath;
+      try {
+        if (typeof require !== 'undefined') {
+          return require('@/assets/' + imagePath.replace('../assets/', ''));
+        }
+        return '';
+      } catch {
+        return '';
+      }
     },
     startCheckout() {
       alert('Извините, в данный момент оплата недоступна из-за технических работ. Пожалуйста, попробуйте позже.');
-    },
-    removeFromCart(productId) {
-      this.$store.dispatch('removeFromCart', productId);
     }
   }
 }
@@ -55,33 +67,64 @@ export default {
   vertical-align: top;
 }
 
-.checkout-button {
-  background-color: #6C8CD5;
-  color: white;
-  border: none;
+.main-btn {
+  font-size: 1.2em;
   padding: 10px 20px;
-  border-radius: 4px;
+  background-color: white;
+  color: black;
+  border: 2px solid #222;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 20px;
-}
-
-.checkout-button:hover {
-  background-color: #5A7ABF;
-}
-
-.product-info button {
-  background-color: #6C8CD5;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
   margin-top: 10px;
 }
+.main-btn:hover {
+  border: 2px solid #3a4ed8;
+  color: #3a4ed8;
+  background: #f4f7ff;
+}
 
-.product-info button:hover {
-  background-color: #5A7ABF;
+@media (max-width: 900px) {
+  .cart {
+    padding: 8px;
+  }
+  ul {
+    padding: 0;
+  }
+  li {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 4px 10px 4px;
+  }
+  .product-image {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    margin: 0 auto 8px auto;
+    display: block;
+  }
+  .main-btn {
+    font-size: 1em;
+    padding: 8px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+}
+@media (max-width: 600px) {
+  .cart {
+    padding: 4px;
+  }
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  .main-btn {
+    font-size: 1em;
+    padding: 8px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
 }
 </style>

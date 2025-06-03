@@ -3,11 +3,11 @@
     <h2>Товары</h2>
     <ul>
       <li v-for="item in favorites" :key="item.id">
-        <img @click="onDetailsClick" src="../assets/крем.svg" alt="Product Image" class="product-image" />
+        <img :src="getImageUrl(item.image)" alt="Product Image" class="product-image" />
         <div class="product-info">
           <h3>{{ item.title }}</h3>
           <p>Цена: {{ item.price }}</p>
-          <button @click="removeFromFavorites(item.id)">Удалить</button>
+          <button class="main-btn" @click="removeFromFavorites(item.id)">Удалить</button>
         </div>
       </li>
     </ul>
@@ -23,11 +23,19 @@ export default {
     }
   },
   methods: {
-    onDetailsClick() {
-      // Логика для перехода на страницу товара
-    },
     removeFromFavorites(productId) {
       this.$store.dispatch('removeFromFavorites', productId);
+    },
+    getImageUrl(imagePath) {
+      if (/^(http|https|data):/.test(imagePath)) return imagePath;
+      try {
+        if (typeof require !== 'undefined') {
+          return require('@/assets/' + imagePath.replace('../assets/', ''));
+        }
+        return '';
+      } catch {
+        return '';
+      }
     }
   }
 }
@@ -51,18 +59,64 @@ export default {
   vertical-align: top;
 }
 
-.product-info button {
-  background-color: #6C8CD5;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
+.main-btn {
+  font-size: 1.2em;
+  padding: 10px 20px;
+  background-color: white;
+  color: black;
+  border: 2px solid #222;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
   margin-top: 10px;
 }
+.main-btn:hover {
+  border: 2px solid #3a4ed8;
+  color: #3a4ed8;
+  background: #f4f7ff;
+}
 
-.product-info button:hover {
-  background-color: #5A7ABF;
+@media (max-width: 900px) {
+  .favorites {
+    padding: 8px;
+  }
+  ul {
+    padding: 0;
+  }
+  li {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 4px 10px 4px;
+  }
+  .product-image {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    margin: 0 auto 8px auto;
+    display: block;
+  }
+  .main-btn {
+    font-size: 1em;
+    padding: 8px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+}
+@media (max-width: 600px) {
+  .favorites {
+    padding: 4px;
+  }
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  .main-btn {
+    font-size: 1em;
+    padding: 8px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
 }
 </style>

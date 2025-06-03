@@ -1,8 +1,8 @@
 <template>
   <div class="product-card">
-    <img src="../assets/крем.svg" alt="Product Image" class="product-image" />
+    <img :src="getImageUrl(image)" alt="Product Image" class="product-image" />
     <h2 class="product-title">{{ title }}</h2>
-    <p class="product-price">{{ price }}</p>
+    <p class="product-price">₽ {{ price }}</p>
     <button class="details-button" @click="onDetailsClick">Подробнее</button>
   </div>
 </template>
@@ -31,6 +31,33 @@ export default {
   methods: {
     onDetailsClick() {
       this.$router.push({ name: 'ProductDetails', params: { id: this.id } });
+    },
+    addToCart() {
+      this.$store.dispatch('addToCart', {
+        id: this.id,
+        title: this.title,
+        image: this.image,
+        price: this.price
+      });
+    },
+    addToFavorites() {
+      this.$store.dispatch('addToFavorites', {
+        id: this.id,
+        title: this.title,
+        image: this.image,
+        price: this.price
+      });
+    },
+    getImageUrl(imagePath) {
+      if (/^(http|https|data):/.test(imagePath)) return imagePath;
+      try {
+        if (typeof require !== 'undefined') {
+          return require('@/assets/' + imagePath.replace('../assets/', ''));
+        }
+        return '';
+      } catch {
+        return '';
+      }
     }
   }
 }

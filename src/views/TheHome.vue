@@ -2,7 +2,7 @@
   <img src="../assets/новая коллекция.svg" style="width: 100%;">
   <img src="../assets/прем.svg" style="width: 100%;">
   <h1 style="text-align: center;">Новинки</h1>
-  <div class="carousel-wrapper">
+  <div class="carousel-wrapper" v-if="products && products.length > 0">
     <button class="arrow left" @click="scrollLeft">←</button>
     <div class="carousel">
       <div
@@ -16,7 +16,7 @@
     <button class="arrow right" @click="scrollRight">→</button>
   </div>
   <h1 style="text-align: center;">Популярное</h1>
-  <div class="carousel-wrapper">
+  <div class="carousel-wrapper" v-if="products && products.length > 0">
     <button class="arrow left" @click="scrollLeft">←</button>
     <div class="carousel">
       <div
@@ -100,5 +100,39 @@ function scrollRight() {
 }
 .arrow:active {
   background: #eee;
+}
+
+@media (max-width: 900px) {
+  .carousel-wrapper {
+    height: 340px;
+  }
+  .carousel-item {
+    flex: 0 0 90px;
+    margin: 0 4px;
+    padding: 6px 2px;
+  }
+  .arrow {
+    font-size: 20px;
+    padding: 6px;
+  }
+}
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.1rem;
+    margin: 10px 0 6px 0;
+  }
+  .carousel-wrapper {
+    height: 180px;
+    margin: 10px auto;
+  }
+  .carousel-item {
+    flex: 0 0 60px;
+    margin: 0 2px;
+    padding: 2px 1px;
+  }
+  .arrow {
+    font-size: 16px;
+    padding: 4px;
+  }
 }
 </style>
