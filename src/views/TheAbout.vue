@@ -37,6 +37,39 @@
 .text-content {
   padding: 20px;
   text-align: justify;
+  line-height: 1.7;
+  color: #222;
+}
+@media (max-width: 900px) {
+  .content-wrapper {
+    padding: 18px;
+    font-size: 18px;
+  }
+  .text-content {
+    padding: 8px;
+    font-size: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .content-wrapper {
+    padding: 4vw 2vw;
+    font-size: 1.05rem;
+  }
+  .text-content {
+    padding: 0;
+    font-size: 1.01rem;
+    line-height: 1.6;
+  }
+  h1 {
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+    padding: 0 2px;
+  }
+  ul, p {
+    margin-bottom: 12px;
+    margin-top: 0;
+    word-break: break-word;
+  }
 }
 
 .list {

@@ -11,6 +11,8 @@ import TheHotline from '../views/TheHotline.vue'
 import LoginView from '../views/LoginView.vue'
 import RegistrationView from '../views/RegistrationView.vue'
 import AuthComponent from '../views/AuthComponent.vue'
+import SiteMap from '../views/SiteMap.vue'
+import OfferView from '../views/OfferView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -83,6 +85,18 @@ const routes: RouteRecordRaw[] = [
     path: '/cosmetics_store/hotline',
     name: 'Hotline',
     component: TheHotline,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/sitemap',
+    name: 'SiteMap',
+    component: SiteMap,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/offer',
+    name: 'Offer',
+    component: OfferView,
     props: true
   }
 ]

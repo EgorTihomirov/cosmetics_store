@@ -2,12 +2,12 @@
   <div class="favorites">
     <h2>Товары</h2>
     <ul>
-      <li v-for="item in favorites" :key="item.id">
+      <li v-for="item in favorites" :key="item.id" @click="goToProduct(item.id)" style="cursor:pointer;">
         <img :src="getImageUrl(item.image)" alt="Product Image" class="product-image" />
         <div class="product-info">
           <h3>{{ item.title }}</h3>
           <p>Цена: {{ item.price }}</p>
-          <button class="main-btn" @click="removeFromFavorites(item.id)">Удалить</button>
+          <button class="main-btn" @click.stop="removeFromFavorites(item.id)">Удалить</button>
         </div>
       </li>
     </ul>
@@ -36,6 +36,9 @@ export default {
       } catch {
         return '';
       }
+    },
+    goToProduct(id) {
+      this.$router.push({ name: 'ProductDetails', params: { id } });
     }
   }
 }
@@ -76,12 +79,29 @@ export default {
   background: #f4f7ff;
 }
 
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 18px;
+  background: #f9f9fb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(60, 80, 180, 0.04);
+  padding: 14px 10px 10px 10px;
+  transition: box-shadow 0.2s;
+}
+li:hover {
+  box-shadow: 0 4px 16px #1976d233;
+}
+
 @media (max-width: 900px) {
   .favorites {
     padding: 8px;
-  }
-  ul {
-    padding: 0;
   }
   li {
     flex-direction: column;
@@ -106,6 +126,11 @@ export default {
 @media (max-width: 600px) {
   .favorites {
     padding: 4px;
+  }
+  li {
+    padding: 4px 2px 6px 2px;
+    border-radius: 7px;
+    font-size: 0.97em;
   }
   .product-image {
     max-width: 100%;

@@ -5,7 +5,7 @@
     </div>
     <div class="product-info">
       <h1 style="padding-bottom: 20px;">{{ product?.title }}</h1>
-      <p style="padding-bottom: 20px;">Цена: {{ product?.price }}</p>
+      <p style="padding-bottom: 20px;">Цена: ₽ {{ product?.price }}</p>
       <br>
       <h1 style="padding-bottom: 30px;">Наличие доставки:</h1>
       <p style="padding-bottom: 10px;">Экспресс-доставка ............от 3 часов</p>
@@ -123,12 +123,11 @@ const submitReview = async () => {
   padding: 20px;
   display: flex;
   align-items: flex-start;
+  gap: 32px;
 }
-
 .product-image-container {
   margin-right: 20px;
 }
-
 .product-image {
   width: 450px;
   height: auto;
@@ -136,32 +135,29 @@ const submitReview = async () => {
   object-fit: contain;
   border-radius: 4px;
 }
-
 .product-info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-width: 320px;
+  max-width: 500px;
+  width: 100%;
 }
-
 .info {
   padding-left: 50px;
 }
-
 .product-info h1 {
   margin: 0;
   font-size: 1.5em;
 }
-
 .product-info p {
   margin: 0;
   font-size: 1.2em;
 }
-
 .buttons {
   display: flex;
   margin-top: 10px;
 }
-
 .main-btn {
   font-size: 1.2em;
   padding: 10px 20px;
@@ -173,17 +169,14 @@ const submitReview = async () => {
   transition: all 0.3s ease;
   margin-right: 10px;
 }
-
 .main-btn:hover {
   border: 2px solid #3a4ed8;
   color: #3a4ed8;
   background: #f4f7ff;
 }
-
 .review-section {
   margin-top: 30px;
 }
-
 .review-form {
   background: #f9f9fb;
   border-radius: 12px;
@@ -195,7 +188,6 @@ const submitReview = async () => {
   gap: 12px;
   max-width: 500px;
 }
-
 .review-form textarea {
   resize: vertical;
   width: 100%;
@@ -207,12 +199,10 @@ const submitReview = async () => {
   transition: border 0.2s;
   min-height: 70px;
 }
-
 .review-form textarea:focus {
   border: 1.5px solid #3a4ed8;
   outline: none;
 }
-
 .review-form select {
   padding: 10px;
   border: 1.5px solid #d0d4e4;
@@ -222,12 +212,10 @@ const submitReview = async () => {
   transition: border 0.2s;
   width: 100%;
 }
-
 .review-form select:focus {
   border: 1.5px solid #3a4ed8;
   outline: none;
 }
-
 .main-btn {
   font-size: 1.2em;
   padding: 10px 20px;
@@ -239,80 +227,91 @@ const submitReview = async () => {
   transition: all 0.3s ease;
   margin-top: 6px;
 }
-
 .main-btn:hover {
   border: 2px solid #3a4ed8;
   color: #3a4ed8;
   background: #f4f7ff;
 }
-
 ul {
   list-style-type: none;
   padding: 0;
 }
-
 li {
   margin-bottom: 10px;
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
 }
-
 .error-message {
   color: red;
   margin-top: 10px;
 }
-
 @media (max-width: 900px) {
   .product-details {
     flex-direction: column;
     align-items: stretch;
-    gap: 16px;
+    gap: 18px;
+    padding: 8px;
   }
   .product-image-container {
     margin-right: 0;
     margin-bottom: 12px;
+    text-align: center;
   }
   .product-image {
     width: 100%;
-    max-width: 320px;
-    height: auto;
+    max-width: 220px;
     margin: 0 auto;
-    display: block;
+  }
+  .product-info {
+    min-width: 160px;
+    max-width: 98vw;
+    padding: 0 4px;
   }
   .info {
     padding-left: 0;
+    margin-top: 10px;
   }
 }
 @media (max-width: 600px) {
   .product-details {
-    padding: 8px;
-    gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 0;
+  }
+  .product-image-container {
+    margin-bottom: 4px;
   }
   .product-image {
-    max-width: 100%;
-    height: auto;
-    border-radius: 6px;
+    width: 100%;
+    max-width: 120px;
+    min-width: 60px;
+    border-radius: 4px;
   }
-  .product-info h1 {
-    font-size: 1.1em;
-    padding-bottom: 10px;
+  .product-info {
+    min-width: 60px;
+    max-width: 100vw;
+    padding: 0 1vw;
+    font-size: 0.93em;
+  }
+  .info {
+    padding-left: 0;
+    margin-top: 4px;
+    font-size: 0.93em;
   }
   .main-btn {
-    font-size: 1em;
-    padding: 8px 8px;
-    border-radius: 6px;
-    margin-right: 6px;
+    font-size: 0.95em;
+    padding: 6px 6px;
+    border-radius: 5px;
+    margin-top: 2px;
+  }
+  .review-section {
+    margin-top: 8px;
   }
   .review-form {
-    padding: 10px 6px 8px 6px;
-    border-radius: 8px;
-    max-width: 100%;
-  }
-  .review-form textarea,
-  .review-form select {
-    font-size: 1em;
-    padding: 8px;
+    padding: 4px 2px 4px 2px;
     border-radius: 6px;
+    font-size: 0.93em;
   }
 }
 </style>

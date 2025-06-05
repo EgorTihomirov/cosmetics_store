@@ -5,6 +5,10 @@
       <div class="profile-info">
         <h2>{{ currentUser.firstName }} {{ currentUser.lastName }}</h2>
         <p class="username">@{{ currentUser.username }}</p>
+        <div class="profile-links">
+          <button class="main-btn" @click="goToSiteMap">Карта сайта</button>
+          <button class="main-btn" @click="goToOffer">Оферта</button>
+        </div>
         <button class="main-btn" @click="handleLogout">Выйти</button>
       </div>
     </div>
@@ -12,11 +16,11 @@
       <div class="section">
         <h3>Избранное</h3>
         <div v-if="favorites.length > 0" class="products-grid">
-          <div v-for="item in favorites" :key="item.id" class="product-card">
+          <div v-for="item in favorites" :key="item.id" class="product-card" @click="goToProduct(item.id)" style="cursor:pointer;">
             <img :src="getImageUrl(item.image)" alt="Product Image" class="product-image" />
             <div class="product-title">{{ item.title }}</div>
             <div class="product-price">{{ item.price }} ₽</div>
-            <button class="main-btn" @click="removeFromFavorites(item.id)">Убрать</button>
+            <button class="main-btn" @click.stop="removeFromFavorites(item.id)">Убрать</button>
           </div>
         </div>
         <div v-else class="empty-placeholder">Нет избранных товаров</div>
@@ -24,11 +28,11 @@
       <div class="section">
         <h3>Корзина</h3>
         <div v-if="cart.length > 0" class="products-grid">
-          <div v-for="item in cart" :key="item.id" class="product-card">
+          <div v-for="item in cart" :key="item.id" class="product-card" @click="goToProduct(item.id)" style="cursor:pointer;">
             <img :src="getImageUrl(item.image)" alt="Product Image" class="product-image" />
             <div class="product-title">{{ item.title }}</div>
             <div class="product-price">{{ item.price }} ₽</div>
-            <button class="main-btn" @click="removeFromCart(item.id)">Убрать</button>
+            <button class="main-btn" @click.stop="removeFromCart(item.id)">Убрать</button>
           </div>
         </div>
         <div v-else class="empty-placeholder">Корзина пуста</div>
@@ -44,9 +48,11 @@
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import AuthComponent from './AuthComponent.vue';
 
 const store = useStore();
+const router = useRouter();
 const currentUser = computed(() => store.getters.getCurrentUser);
 const favorites = computed(() => store.getters.getFavorites);
 const cart = computed(() => store.getters.getCart);
@@ -76,6 +82,17 @@ const removeFromFavorites = (id: string) => {
 };
 const removeFromCart = (id: string) => {
   store.dispatch('removeFromCart', id);
+};
+
+const goToProduct = (id: string) => {
+  router.push({ name: 'ProductDetails', params: { id } });
+};
+
+const goToSiteMap = () => {
+  router.push({ name: 'SiteMap' });
+};
+const goToOffer = () => {
+  router.push({ name: 'Offer' });
 };
 </script>
 
@@ -196,6 +213,11 @@ const removeFromCart = (id: string) => {
   font-weight: 600;
   color: #3a4ed8;
   font-size: 1.1rem;
+}
+.profile-links {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 @media (max-width: 900px) {
   .profile-sections {

@@ -27,13 +27,13 @@
     <div class="results">
       <h2>Результаты</h2>
       <ul>
-        <li v-for="product in filteredProducts" :key="product.id" class="catalog-item">
+        <li v-for="product in filteredProducts" :key="product.id" class="catalog-item" @click="goToProduct(product.id)" style="cursor:pointer;">
           <img :src="getImageUrl(product.image)" alt="Product Image" class="product-image" />
           <div class="product-info">
             <h3>{{ product.title }}</h3>
             <p>Цена: {{ product.price }} ₽</p>
             <p>{{ product.description }}</p>
-            <div class="catalog-btns">
+            <div class="catalog-btns" @click.stop>
               <button class="main-btn" :disabled="isInCart(product.id)" @click="addToCart(product)">
                 {{ isInCart(product.id) ? 'В корзине' : 'В корзину' }}
               </button>
@@ -106,6 +106,9 @@ export default {
     },
     selectCategory(cat) {
       this.selectedCategory = cat;
+    },
+    goToProduct(id) {
+      this.$router.push({ name: 'ProductDetails', params: { id } });
     }
   }
 }
@@ -116,56 +119,15 @@ export default {
   display: flex;
   padding: 20px;
 }
-
 .filters {
   width: 220px;
   margin-right: 20px;
   border-right: 1px solid #ccc;
   padding-right: 20px;
 }
-
 .results {
   flex: 1;
 }
-
-.search {
-  margin-bottom: 10px;
-}
-
-.search input {
-  border: none;
-  padding: 10px;
-  transition: border 0.3s;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.search input:focus {
-  border: 2px solid black;
-}
-
-.price-range {
-  margin-bottom: 10px;
-}
-
-.price-range input[type="range"] {
-  width: 100%;
-  height: 20px;
-  border-radius: 20px;
-  -webkit-appearance: none;
-  background: #e6e6fa;
-  outline: none;
-}
-
-.price-range input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 20px;
-  background: #9370db; 
-  cursor: pointer;
-}
-
 .catalog-item {
   display: flex;
   align-items: flex-start;
@@ -182,9 +144,6 @@ export default {
   object-fit: contain;
   border-radius: 8px;
   margin-right: 10px;
-}
-.product-info {
-  flex: 1;
 }
 .catalog-btns {
   display: flex;
@@ -224,12 +183,46 @@ export default {
   color: #3a4ed8;
   background: #f4f7ff;
 }
-
-/* --- Адаптив --- */
+.search {
+  margin-bottom: 10px;
+}
+.search input {
+  border: none;
+  padding: 10px;
+  transition: border 0.3s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.search input:focus {
+  border: 2px solid black;
+}
+.price-range {
+  margin-bottom: 10px;
+}
+.price-range input[type="range"] {
+  width: 100%;
+  height: 20px;
+  border-radius: 20px;
+  -webkit-appearance: none;
+  background: #e6e6fa;
+  outline: none;
+}
+.price-range input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  background: #9370db; 
+  cursor: pointer;
+}
+.product-info {
+  flex: 1;
+}
 @media (max-width: 900px) {
   .catalog {
     flex-direction: column;
-    padding: 10px;
+    padding: 8px;
+    gap: 10px;
   }
   .filters {
     width: 100%;
@@ -237,62 +230,53 @@ export default {
     border-right: none;
     border-bottom: 1px solid #ccc;
     padding-right: 0;
-    padding-bottom: 16px;
-    margin-bottom: 18px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 10px;
+    justify-content: center;
   }
   .results {
     width: 100%;
   }
-  .category-filter {
-    width: 100%;
-    gap: 8px;
-    justify-content: flex-start;
-  }
   .catalog-item {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
-    padding: 12px 8px 12px 8px;
+    gap: 8px;
+    padding: 10px 4px 10px 4px;
   }
   .product-image {
     width: 100%;
-    max-width: 220px;
+    max-width: 180px;
     height: auto;
     margin: 0 auto 8px auto;
     display: block;
   }
-  .catalog-btns {
-    flex-direction: column;
-    gap: 8px;
-  }
 }
 @media (max-width: 600px) {
   .catalog {
-    padding: 4px;
+    padding: 2px;
+    gap: 4px;
   }
   .filters {
-    flex-direction: column;
-    gap: 10px;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
-  .category-filter {
-    gap: 6px;
-  }
-  .main-btn {
-    font-size: 1em;
-    padding: 8px 8px;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    gap: 4px;
   }
   .catalog-item {
-    padding: 8px 2px 8px 2px;
-    margin-bottom: 12px;
+    padding: 4px 2px 6px 2px;
+    border-radius: 7px;
+    font-size: 0.97em;
   }
   .product-image {
     max-width: 100%;
     height: auto;
+    border-radius: 6px;
+  }
+  .catalog-btns {
+    gap: 6px;
+    margin-top: 6px;
   }
 }
 </style>
