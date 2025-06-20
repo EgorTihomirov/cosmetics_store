@@ -11,6 +11,7 @@
       <router-link class="site-map-card" to="/cosmetics_store/questions">Вопросы</router-link>
       <router-link class="site-map-card" to="/cosmetics_store/hotline">Горячая линия</router-link>
       <router-link class="site-map-card" to="/cosmetics_store/offer">Оферта</router-link>
+      <router-link class="site-map-card" to="/cosmetics_store/def">защита прав</router-link>
     </div>
   </div>
 </template>
