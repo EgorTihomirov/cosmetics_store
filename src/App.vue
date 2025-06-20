@@ -34,6 +34,7 @@
           <router-link to="/cosmetics_store/cart" @click="showMobileMenu = false">Корзина</router-link>
           <router-link to="/cosmetics_store/questions" @click="showMobileMenu = false">Вопросы</router-link>
           <router-link to="/cosmetics_store/offer" @click="showMobileMenu = false">Оферта</router-link>
+          <router-link to="/cosmetics_store/def" @click="showMobileMenu = false">защита прав</router-link>
         </nav>
       </div>
     </transition>
@@ -46,11 +47,13 @@
         <div class="tabs-left">
           <a href="https://t.me/+TV5Ptp9NX4Q3MDQy" class="tab">Следите за нами</a>
           <router-link to="/cosmetics_store/questions" class="tab">Частые вопросы</router-link>
+          <router-link to="/cosmetics_store/def" class="tab">защита прав</router-link>
         </div>
         <router-link to="/cosmetics_store/" class="tab center-tab">
           <h1>Akkery</h1>
         </router-link>
         <div class="tabs-right">
+          <router-link to="/cosmetics_store/offer" class="tab">Оферта</router-link>
           <a href="https://t.me/Akkery_bot" class="tab">Поддержка</a>
           <router-link to="/cosmetics_store/hotline" class="tab">Горячая линия</router-link>
         </div>

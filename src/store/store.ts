@@ -1,17 +1,61 @@
 import { createStore, Commit } from 'vuex';
-import { Product, Review, User, State } from './types';
 
+export interface Product {
+  id: string;
+  title: string;
+  image: string;
+  price: number;
+  description: string;
+  category: string;
+}
+
+export interface Review {
+  id: string;
+  productId: string;
+  author: string;
+  rating: number;
+  comment: string;
+}
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  password: string;
+  role?: 'admin' | 'customer';
+}
+
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface State {
+  products: Product[];
+  cart: Product[];
+  favorites: Product[];
+  users: User[];
+  reviews: Review[];
+  currentUser: User | null;
+  CartItem: CartItem[];
+}
+
+// Функции для работы с localStorage
 function loadUsers(): User[] {
   const users = localStorage.getItem('users');
   return users ? JSON.parse(users) : [];
 }
+
 function saveUsers(users: User[]) {
   localStorage.setItem('users', JSON.stringify(users));
 }
+
 function loadCurrentUser(): User | null {
   const user = localStorage.getItem('currentUser');
   return user ? JSON.parse(user) : null;
 }
+
 function saveCurrentUser(user: User | null) {
   if (user) {
     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -19,24 +63,39 @@ function saveCurrentUser(user: User | null) {
     localStorage.removeItem('currentUser');
   }
 }
+
 function loadReviews(): Review[] {
   const reviews = localStorage.getItem('reviews');
   return reviews ? JSON.parse(reviews) : [];
 }
+
 function saveReviews(reviews: Review[]) {
   localStorage.setItem('reviews', JSON.stringify(reviews));
 }
+
 function loadCart(): Product[] {
   const cart = localStorage.getItem('cart');
   return cart ? JSON.parse(cart) : [];
 }
+
 function saveCart(cart: Product[]) {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
+
+function loadCartItems(): CartItem[] {
+  const cartItems = localStorage.getItem('cartItems');
+  return cartItems ? JSON.parse(cartItems) : [];
+}
+
+function saveCartItems(cartItems: CartItem[]) {
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+}
+
 function loadFavorites(): Product[] {
   const favorites = localStorage.getItem('favorites');
   return favorites ? JSON.parse(favorites) : [];
 }
+
 function saveFavorites(favorites: Product[]) {
   localStorage.setItem('favorites', JSON.stringify(favorites));
 }
@@ -131,12 +190,13 @@ const initialState: State = {
       description: 'Гинокомфорт гель с экстрактом чайного дерева — это восстанавливающий продукт для интимной гигиены. Он помогает поддерживать здоровье и комфорт интимной зоны, благодаря своим антисептическим и противовоспалительным свойствам. Гель эффективно устраняет неприятные ощущения и способствует быстрому восстановлению кожи. Подходит для ежедневного использования и особенно рекомендуется при повышенной чувствительности.',
       category: 'Личная гигиена'
     },
-  ] as Product[],
+  ],
   cart: loadCart(),
   favorites: loadFavorites(),
   users: loadUsers(),
   reviews: loadReviews(),
   currentUser: loadCurrentUser(),
+  CartItem: loadCartItems(),
 };
 
 export default createStore<State>({
@@ -158,11 +218,17 @@ export default createStore<State>({
       return state.products;
     },
     getCart: (state): Product[] => state.cart,
+    getCartItems: (state): CartItem[] => state.CartItem,
     getFavorites: (state): Product[] => state.favorites,
     getReviewsForProduct: (state) => (productId: string): Review[] => {
       return state.reviews.filter(review => review.productId === productId);
     },
-    cartTotalSum: (state): number => state.cart.reduce((sum, item) => sum + Number(item.price), 0),
+    cartTotalSum: (state): number => state.CartItem.reduce(
+      (sum, item) => sum + (item.product.price * item.quantity), 0
+    ),
+    cartTotalItems: (state): number => state.CartItem.reduce(
+      (total, item) => total + item.quantity, 0
+    ),
   },
   mutations: {
     setUsers(state, users: User[]) {
@@ -185,19 +251,45 @@ export default createStore<State>({
       state.cart = cart;
       saveCart(cart);
     },
+    setCartItems(state, cartItems: CartItem[]) {
+      state.CartItem = cartItems;
+      saveCartItems(cartItems);
+    },
     setFavorites(state, favorites: Product[]) {
       state.favorites = favorites;
       saveFavorites(favorites);
     },
     addToCart(state, product: Product) {
-      if (!state.cart.find(item => item.id === product.id)) {
-        state.cart.push(product);
-        saveCart(state.cart);
+      state.cart.push(product);
+      saveCart(state.cart);
+      
+      const existingItem = state.CartItem.find(item => item.product.id === product.id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        state.CartItem.push({ product, quantity: 1 });
       }
+      saveCartItems(state.CartItem);
     },
     removeFromCart(state, productId: string) {
       state.cart = state.cart.filter(item => item.id !== productId);
       saveCart(state.cart);
+      
+      state.CartItem = state.CartItem.filter(item => item.product.id !== productId);
+      saveCartItems(state.CartItem);
+    },
+    updateCartItemQuantity(state, { productId, quantity }: { productId: string; quantity: number }) {
+      const item = state.CartItem.find(item => item.product.id === productId);
+      if (item) {
+        if (quantity > 0) {
+          item.quantity = quantity;
+        } else {
+          state.CartItem = state.CartItem.filter(i => i.product.id !== productId);
+          state.cart = state.cart.filter(i => i.id !== productId);
+        }
+        saveCartItems(state.CartItem);
+        saveCart(state.cart);
+      }
     },
     addToFavorites(state, product: Product) {
       if (!state.favorites.find(item => item.id === product.id)) {
@@ -243,13 +335,14 @@ export default createStore<State>({
       commit('addReview', reviewWithAuthor);
       return { success: true };
     },
-    addToCart({ commit, state }, product: Product) {
-      if (!state.cart.find(item => item.id === product.id)) {
-        commit('addToCart', product);
-      }
+    addToCart({ commit }, product: Product) {
+      commit('addToCart', product);
     },
     removeFromCart({ commit }, productId: string) {
       commit('removeFromCart', productId);
+    },
+    updateQuantity({ commit }, { productId, quantity }: { productId: string; quantity: number }) {
+      commit('updateCartItemQuantity', { productId, quantity });
     },
     addToFavorites({ commit, state }, product: Product) {
       if (!state.favorites.find(item => item.id === product.id)) {

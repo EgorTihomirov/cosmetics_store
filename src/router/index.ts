@@ -13,12 +13,19 @@ import RegistrationView from '../views/RegistrationView.vue'
 import AuthComponent from '../views/AuthComponent.vue'
 import SiteMap from '../views/SiteMap.vue'
 import OfferView from '../views/OfferView.vue'
+import Defence from '../views/TheDefence.vue'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/cosmetics_store/auth',
     name: 'Auth',
     component: AuthComponent,
+    props: true
+  },
+  {
+    path: '/cosmetics_store/def',
+    name: "Def",
+    component: Defence,
     props: true
   },
   {

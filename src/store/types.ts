@@ -21,6 +21,11 @@ export interface User {
   password: string;
   role?: 'admin' | 'customer';
 }
+
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
 export interface State {
   products: Product[];
   cart: Product[];
@@ -28,6 +33,7 @@ export interface State {
   users: User[];
   reviews: Review[];
   currentUser: User | null;
+  CartItem: CartItem[];
 }
 export interface Getters {
   getProductById: (state: State) => (id: string) => Product | undefined;
