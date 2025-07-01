@@ -5,6 +5,7 @@ export interface Product {
   price: number;
   description: string;
   category: string;
+  composition?: string; // Новое необязательное поле
 }
 export interface Review {
   id: string;

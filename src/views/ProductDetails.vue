@@ -16,6 +16,11 @@
         <button class="main-btn" @click="addToFavorites">Добавить в избранное</button>
       </div>
     </div>
+    <!-- Добавленный блок с составом -->
+    <div class="product-composition" v-if="product?.composition">
+      <h2>Состав:</h2>
+      <p>{{ product.composition }}</p>
+    </div>
   </div>
   <div class="info">
     <h2>Описание:</h2>
@@ -143,6 +148,23 @@ const submitReview = async () => {
   max-width: 500px;
   width: 100%;
 }
+/* Добавленные стили для блока с составом */
+.product-composition {
+  flex: 1;
+  max-width: 400px;
+  padding: 0 20px;
+  border-left: 1px solid #eee;
+}
+.product-composition h2 {
+  margin-top: 0;
+  font-size: 1.3em;
+  color: #333;
+}
+.product-composition p {
+  white-space: pre-line;
+  line-height: 1.6;
+  color: #555;
+}
 .info {
   padding-left: 50px;
 }
@@ -267,6 +289,14 @@ li {
     max-width: 98vw;
     padding: 0 4px;
   }
+  /* Адаптация блока с составом для мобильных */
+  .product-composition {
+    max-width: 100%;
+    border-left: none;
+    border-top: 1px solid #eee;
+    padding: 20px 0 0 0;
+    margin-top: 20px;
+  }
   .info {
     padding-left: 0;
     margin-top: 10px;
@@ -293,6 +323,10 @@ li {
     max-width: 100vw;
     padding: 0 1vw;
     font-size: 0.93em;
+  }
+  .product-composition {
+    font-size: 0.9em;
+    padding: 10px 0 0 0;
   }
   .info {
     padding-left: 0;
