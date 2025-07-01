@@ -45,7 +45,7 @@
       <hr />
       <div style="display: flex; justify-content: space-between; padding-left: 20px; padding-right: 20px;">
         <div class="tabs-left">
-          <a href="https://t.me/+TV5Ptp9NX4Q3MDQy" class="tab">Следите за нами</a>
+          <a href="https://t.me/+TV5Ptp9NX4Q3MDQy" class="tab">Следите за нами <img src="../src/assets/icons8-телеграм-32.png" width="25" height="25"></a>
           <router-link to="/cosmetics_store/questions" class="tab">Частые вопросы</router-link>
           <router-link to="/cosmetics_store/def" class="tab">защита прав</router-link>
         </div>
